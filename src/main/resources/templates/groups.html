@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Список групп</h1>
+    <form action="/groups" method="get">
+        <label for="groupSelect">Выберите группу:</label>
+        <select id="groupSelect" name="groupId">
+            <option value="">Выберите группу</option>
+            <!-- Перечисляем группы из модели -->
+            <c:forEach items="${groups}" var="group">
+                <option value="${group.id}">${group.name}</option>
+            </c:forEach>
+        </select>
+        <button type="submit">Показать информацию</button>
+    </form>
+</body>
+</html>

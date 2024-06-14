@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<head lang="en">
+  <meta charset="UTF-8" />
+  <title>Spring</title>
+  <link rel="stylesheet" href="/main.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+  <style>
+    .suggestions {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      border: 1px solid #ccc;
+      background-color: #fff;
+      max-height: 150px;
+      overflow-y: auto;
+      z-index: 1000;
+      position: absolute;
+    }
+
+    .suggestions li {
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    .suggestions li:hover {
+      background-color: #f0f0f0;
+    }
+
+    .form-container {
+      margin-top: 50px;
+      position: relative;
+    }
+
+    .form-container .card {
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .form-container .card-header {
+      background-color: #343a40;
+      color: #ffffff;
+    }
+
+    .form-container .form-control {
+      border-radius: 5px;
+    }
+
+    .form-container .form-row {
+      margin-bottom: 10px;
+    }
+
+    .form-container .form-row+.form-row {
+      margin-top: -5px;
+    }
+
+    .form-container .form-group {
+      margin-bottom: 10px;
+    }
+
+    .form-container button {
+      background-color: #007bff;
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      margin-top: 10px;
+    }
+
+    .form-container button:hover {
+      background-color: #0056b3;
+    }
+
+    .form-container .action-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+
+    .form-container .position-relative .form-control {
+      margin-bottom: 0;
+    }
+
+    .position-relative {
+      position: relative;
+    }
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Расписание</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Главная</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Поиск</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Поддержка</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container form-container">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="mb-0">Группа</h3>
+      </div>
+      <div class="card-body">
+        <form action="#" th:action="@{/create}" method="post">
+          <div class="form-group position-relative">
+            <input type="text" class="form-control" id="groupInput" name="groupName" placeholder="Название группы">
+            <ul class="suggestions" id="groupSuggestions"></ul>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" id="groupYear" name="groupYear" placeholder="Курс">
+          </div>
+          <div class="form-group">
+            <select class="form-control" name="days" id="day-select">
+              <option value="">Форма обучения</option>
+              <option value="Очная">Очная</option>
+              <option value="Заочная">Заочная</option>
+              <option value="Очно-заочная">Очно-заочная</option>
+            </select>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="card mt-4">
+      <div class="card-header">
+        <h3 class="mb-0">Расписание</h3>
+      </div>
+      <div class="card-body" id="form-container">
+        <form id="lesson-form" th:action="@{/create}" method="post">
+          <div class="form-row">
+            <div class="form-group col-md-3">
+              <select class="form-control" name="days" id="day-select">
+                <option value="">Выберите день</option>
+                <option value="Понедельник">Понедельник</option>
+                <option value="Вторник">Вторник</option>
+                <option value="Среда">Среда</option>
+                <option value="Четверг">Четверг</option>
+                <option value="Пятница">Пятница</option>
+                <option value="Суббота">Суббота</option>
+              </select>
+            </div>
+            <div class="form-group col-md-2">
+              <input type="text" class="form-control" name="number" placeholder="Номер урока">
+            </div>
+            <div class="form-group col-md-3 position-relative">
+              <input type="text" class="form-control" id="subjectInput" name="subject" placeholder="Предмет">
+              <ul class="suggestions" id="subjectSuggestions"></ul>
+            </div>
+            <div class="form-group col-md-3 position-relative">
+              <input type="text" class="form-control" id="teacherInput" name="teacher" placeholder="Преподаватель">
+              <ul class="suggestions" id="teacherSuggestions"></ul>
+            </div>
+          </div>
+        </form>
+        <button type="button" class="btn btn-secondary" id="duplicate-btn" onclick="addLessonForm()">Добавить
+          занятие</button>
+        <button type="submit" class="btn btn-primary" id="submit-btn">Сохранить</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function addLessonForm() {
+      var form = document.getElementById('lesson-form');
+      var clonedForm = form.cloneNode(true);
+
+      // очищает поля
+      clonedForm.querySelectorAll('input, select').forEach(input => {
+        if (input.tagName === 'SELECT') {
+          input.selectedIndex = 0;
+        } else {
+          input.value = '';
+        }
+      });
+
+      // добавляет новую форму для добавления занятия
+      var formContainer = document.getElementById('form-container');
+      var newFormContainer = document.createElement('div');
+      newFormContainer.className = 'form-container';
+      newFormContainer.appendChild(clonedForm);
+
+      formContainer.appendChild(newFormContainer);
+
+      // Перемещает кнопки под новую форму
+      var duplicateBtn = document.getElementById('duplicate-btn');
+      var submitBtn = document.getElementById('submit-btn');
+      formContainer.appendChild(duplicateBtn);
+      formContainer.appendChild(submitBtn);
+    }
+  </script>
+
+  <script>
+    document.getElementById('submit-btn').addEventListener('click', function (event) {
+      event.preventDefault();
+
+      let forms = document.querySelectorAll('#form-container form');
+      let lessons = [];
+
+      forms.forEach((form, index) => {
+        let formData = new FormData(form);
+        let lesson = {};
+
+        formData.forEach((value, key) => {
+          lesson[key] = value;
+        });
+
+        lessons.push(lesson);
+      });
+
+      let group = {
+        groupName: document.querySelector
+          ('input[name="groupName"]').value,
+        groupYear: document.querySelector('input[name="groupYear"]').value,
+        formOfStudy: document.querySelector('select[name="days"]').value,
+        lessons: lessons
+      };
+
+      fetch('/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(group)
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Success:', data);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    });
+
+  </script>
+
+  <script>
+    $(document).ready(function () {
+      function setupAutocomplete(inputId, suggestionsId, url) {
+        $("#" + inputId).on("input", function () {
+          let $input = $("#" + inputId);
+          let $suggestions = $("#" + suggestionsId);
+          let query = $(this).val();
+          if (query.length > 2) { // Начнем поиск после ввода 3 символов
+            $.ajax({
+              url: url,
+              data: { query: query },
+              success: function (data) {
+                $("#" + suggestionsId).empty();
+                data.forEach(function (item) {
+                  $("#" + suggestionsId).append("<li>" + item + "</li>");
+                });
+
+                // Позиционируем список предложений прямо под input
+                let offset = $input.offset();
+                $suggestions.css({
+                  top: offset.top + $input.outerHeight(),
+                  left: offset.left,
+                  width: $input.outerWidth()
+                }).show();
+              }
+            });
+          } else {
+            $("#" + suggestionsId).empty();
+          }
+        });
+
+        $(document).on("click", "#" + suggestionsId + " li", function () {
+          $("#" + inputId).val($(this).text());
+          $("#" + suggestionsId).empty();
+        });
+
+        $(document).click(function (event) {
+          if (!$(event.target).closest("#" + inputId + ", #" + suggestionsId).length) {
+            $("#" + suggestionsId).empty();
+          }
+        });
+      }
+
+      setupAutocomplete("groupInput", "groupSuggestions", "/api/groupnames");
+      setupAutocomplete("subjectInput", "subjectSuggestions", "/api/subjectnames");
+      setupAutocomplete("teacherInput", "teacherSuggestions", "/api/teachernames");
+    });
+  </script>
+
+</body>
+
+</html>

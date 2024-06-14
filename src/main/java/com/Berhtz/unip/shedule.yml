@@ -1,0 +1,16 @@
+group: ПМиИ
+Schedule:
+  - Day: Понедельник
+    - Lesson:
+      - Subject: Информатика
+      - Time: 8:00
+      - Teacher: Петров
+    - Lesson:
+      - Subject: Математика
+      - Teacher: Смирнов
+      - Time: 9:30
+  - Day: Вторник
+    - Lesson:
+      - Subject: Русский язык
+      - Time: 8:00
+      - Teacher: Сидоров

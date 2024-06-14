@@ -1,0 +1,29 @@
+spring: 
+  datasource:
+    url: jdbc:postgresql://localhost:5432/unip
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: bert005
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  thymeleaf:
+    cache: false
+    enabled: true
+    prefix: classpath:/templates/
+    suffix: .html
+  logging:
+  level:
+    root: INFO
+    com.Berhtz.unip: DEBUG
+    org.hibernate: WARN
+    org.hibernate.SQL: WARN
+    org.hibernate.type: WARN
+  file: 
+    name: logs/unip.log
