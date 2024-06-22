@@ -131,7 +131,8 @@
   <div class="container mt-5">
     <div class="card">
       <div class="card-header bg-dark text-white">
-        <h3 class="mb-0">Расписание занятий</h3>
+        <!-- <h3 class="mb-0">Расписание занятий</h3> -->
+        <h3 class="mb=0" th:text="${lessons[0].group.groupName.name}"></h3>
       </div>
       <div class="card-body p-0">
         <table class="table table-sm table-dark m-0">
@@ -140,7 +141,7 @@
               <th scope="col">День</th>
               <th scope="col">№</th>
               <th scope="col">Предмет</th>
-              <th scope="col">Группа</th>
+              <!-- <th scope="col">Группа</th> -->
               <th scope="col">Преподаватель</th>
             </tr>
           </thead>
@@ -149,7 +150,7 @@
               <td scope="row" th:text="${lesson.Day.name}"></td>
               <td scope="row" th:text="${lesson.number}"></td>
               <td scope="row" th:text="${lesson.subject.name}"></td>
-              <td scope="row" th:text="${lesson.group.groupName.name + ' ' + lesson.group.year + ', ' + lesson.group.studyForm}"></td>
+              <!-- <td scope="row" th:text="${lesson.group.groupName.name + ' ' + lesson.group.year + ', ' + lesson.group.studyForm}"></td> -->
               <td scope="row" th:text="${lesson.teacher.name}"></td>
             </tr>
           </tbody>
